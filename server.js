@@ -12,6 +12,9 @@ const PORT = process.env.PORT || 3001;
 
 const app = express();
 
+//static = middleware to serve the entire public folder when accessing the root
+app.use(express.static('public'));
+
 // parse incoming string or array data
 // extended: true means there may be nested arrays in the POST data
 app.use(express.urlencoded({ extended: true }));
@@ -129,6 +132,25 @@ function validateAnimal(animal) {
   }
   return true;
 }
+
+//serve the index page when accessing root
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+// access the animals page
+app.get('/animals', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/animals.html'));
+});
+
+
+app.get('/zookeepers', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/zookeepers.html'));
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/index.html'));
+});
 
 app.listen(PORT, () => {
   console.log(`API server now on port ${PORT}!`);
